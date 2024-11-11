@@ -2,36 +2,40 @@
 import { useState } from "react";
 import { Typography, Input, Button } from "@material-tailwind/react";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
+import { SubmitHandler, useForm } from "react-hook-form";
+import IUser from "../../../interfaces/IUser";
+import { Link } from "react-router-dom";
 
 const SignIn = () => {
     const [passwordShown, setPasswordShown] = useState(false);
     const togglePasswordVisiblity = () => setPasswordShown((cur) => !cur);
-
+    const {register, handleSubmit, formState: {errors}}=useForm<IUser>();
+    const onSubmit: SubmitHandler<IUser> = data =>console.log(data)
     return (
         <>
             <section className="grid text-center min-h-screen items-center p-8">
             <div className="py-20 w-1/2 rounded-lg shadow-2xl border bg-white mx-auto my-auto">
                     <Typography variant="h3" color="blue-gray" className="mb-2">
-                        Sign In
+                        Inicia sesión
                     </Typography>
                     <Typography className="mb-16 text-gray-600 font-normal text-[18px]">
-                        Enter your email and password to sign in
+                        Ingresa tu correo y contraseña para ingresar
                     </Typography>
-                    <form action="#" className="mx-auto max-w-[24rem] text-left">
+                    <form onSubmit={handleSubmit(onSubmit)} action="#" className="mx-auto max-w-[24rem] text-left">
                         <div className="mb-6">
                             <label htmlFor="email">
                                 <Typography
                                     variant="small"
                                     className="mb-2 block font-medium text-gray-900"
                                 >
-                                    Your Email
+                                    Tu correo
                                 </Typography>
                             </label>
                             <Input
                                 id="email"
                                 color="gray"
                                 size="lg"
-                                type="email"
+                                type="email" {...register("email", {required: true})}
                                 name="email"
                                 placeholder="name@mail.com"
                                 className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
@@ -39,6 +43,7 @@ const SignIn = () => {
                                     className: "hidden",
                                 }}
                             />
+                             {errors.email && (<span className="text-danger">Ingresa un correo</span>)}
                         </div>
                         <div className="mb-6">
                             <label htmlFor="password">
@@ -46,7 +51,7 @@ const SignIn = () => {
                                     variant="small"
                                     className="mb-2 block font-medium text-gray-900"
                                 >
-                                    Password
+                                    Contraseña
                                 </Typography>
                             </label>
                             <Input
@@ -56,7 +61,7 @@ const SignIn = () => {
                                     className: "hidden",
                                 }}
                                 className="w-full placeholder:opacity-100 focus:border-t-primary border-t-blue-gray-200"
-                                type={passwordShown ? "text" : "password"}
+                                type={passwordShown ? "text" : "password"} {...register("password", {required: true})}
                                 icon={
                                     <i onClick={togglePasswordVisiblity}>
                                         {passwordShown ? (
@@ -67,8 +72,9 @@ const SignIn = () => {
                                     </i>
                                 }
                             />
+                            {errors.password && (<span className="text-danger">Ingresa una contraseña</span>)}
                         </div>
-                        <Button color="gray" size="lg" className="mt-6" fullWidth>
+                        <Button type="submit" color="gray" size="lg" className="mt-6" fullWidth>
                             sign in
                         </Button>
                         <div className="!mt-4 flex justify-end">
@@ -101,9 +107,9 @@ const SignIn = () => {
                             className="!mt-4 text-center font-normal"
                         >
                             Not registered?{" "}
-                            <a href="#" className="font-medium text-gray-900">
+                            <Link to="/signUp" className="font-medium text-gray-900">
                                 Create account
-                            </a>
+                            </Link>
                         </Typography>
                     </form>
                 </div>
