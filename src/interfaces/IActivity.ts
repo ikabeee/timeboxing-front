@@ -1,4 +1,4 @@
-export default interface IActivty{
+export default interface IActivity{
     id?: number,
     title: string,
     description: string,
